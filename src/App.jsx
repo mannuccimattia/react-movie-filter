@@ -34,19 +34,35 @@ const initialMovies = [
   },
 ]
 
+// empty new movie template
 const App = () => {
+  const emptyItem = {
+    id: "",
+    title: "",
+    genre: "",
+  }
+
   const [filteredMovies, setFilteredMovies] = useState(initialMovies);
   const [genre, setGenre] = useState("");
   const [search, setSearch] = useState("");
+  const [movies, setMovies] = useState(initialMovies);
+  const [newMovie, setNewMovie] = useState(emptyItem)
+
+  // get new movie id (biggest available + 1) 
+  emptyItem.id = parseInt(
+    Math.max(...movies.map(movie => movie.id))
+  ) + 1
 
   // filter movies effect
   useEffect(() => {
-    let filtered = initialMovies;
+    let filtered = movies;
 
+    // filter genre
     if (genre) {
       filtered = filtered.filter(movie => movie.genre === genre);
     }
 
+    // filter title
     if (search.trim() !== '') {
       filtered = filtered.filter(movie =>
         movie.title.toLowerCase().includes(search.toLowerCase())
@@ -54,7 +70,16 @@ const App = () => {
     }
 
     setFilteredMovies(filtered);
-  }, [initialMovies, genre, search]);
+  }, [movies, genre, search]);
+
+  // add new movie
+  const addMovie = (e) => {
+    e.preventDefault();
+    if (newMovie.title && newMovie.genre) {
+      setMovies([...movies, newMovie]);
+      setNewMovie(emptyItem);
+    }
+  }
 
   return (
     <div className="container">
@@ -103,6 +128,42 @@ const App = () => {
           onChange={(e) => { setSearch(e.target.value) }}
         />
       </div>
+
+      {/* add new movie */}
+      <h4 className='text-center mt-4'>
+        Aggiungi un nuovo film
+      </h4>
+
+      <form onSubmit={addMovie}>
+        <div className="row">
+          <div className="col-6">
+            <input
+              type="text"
+              className='form-control m-3'
+              placeholder='Aggiungi Titolo'
+              value={newMovie.title}
+              onChange={(e) => { setNewMovie({ ...newMovie, title: e.target.value }) }}
+            />
+          </div>
+          <div className="col-6">
+            <input
+              type="text"
+              className='form-control m-3'
+              placeholder='Aggiungi Genere'
+              value={newMovie.genre}
+              onChange={(e) => { setNewMovie({ ...newMovie, genre: e.target.value }) }}
+            />
+          </div>
+          <div className="col-12 d-flex justify-content-center">
+            <button
+              className='btn btn-primary ms-4'
+              type='submit'
+            >Aggiungi</button>
+          </div>
+        </div>
+
+      </form>
+
     </div>
   )
 }
