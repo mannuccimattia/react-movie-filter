@@ -1,6 +1,7 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 
-const movies = [
+const initialMovies = [
   {
     id: 1,
     title: 'Inception',
@@ -34,31 +35,54 @@ const movies = [
 ]
 
 const App = () => {
+  const [filteredMovies, setFilteredMovies] = useState(initialMovies);
+  const [genre, setGenre] = useState("");
+
+
+  useEffect(() => {
+    if (genre === '') {
+      setFilteredMovies(initialMovies);
+    } else {
+      setFilteredMovies(initialMovies.filter(movie => movie.genre === genre));
+    }
+  }, [genre]);
+
   return (
     <div className="container">
       <h1>Movie List</h1>
+
       {/* select genre */}
       <div className="form-floating">
         <select
           className="form-select form-select-lg"
-          aria-label="Default select example"
+          id='genreSelect'
+          value={genre}
+          onChange={(e) => {
+            setGenre(e.target.value)
+          }}
         >
-          <option selected id='genreSelect'>Tutti i generi</option>
-          <option value="1">Azione</option>
-          <option value="2">Fantascienza</option>
-          <option value="3">Thriller</option>
-          <option value="4">Romantico</option>
+          <option value="">Tutti i generi</option>
+          <option value="Azione">Azione</option>
+          <option value="Fantascienza">Fantascienza</option>
+          <option value="Thriller">Thriller</option>
+          <option value="Romantico">Romantico</option>
         </select>
-        <label for="genreSelect">Genere:</label>
+        <label htmlFor="genreSelect">Genere:</label>
       </div>
+
       {/* display items */}
-      {movies.map(item => (
-        <div className="card m-2" key={`movie-${item.id}`}>
-          <div className="card-title p-2">
-            {item.title}
-          </div>
-        </div>
-      ))}
+      <ul className='list-unstyled'>
+        {filteredMovies.map(item => (
+          <li
+            className="card m-2"
+            key={`movie-${item.id}`}
+          >
+            <div className="card-title p-2">
+              {item.title}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
