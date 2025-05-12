@@ -59,7 +59,7 @@ const App = () => {
 
     // filter genre
     if (genre) {
-      filtered = filtered.filter(movie => movie.genre === genre);
+      filtered = filtered.filter(movie => movie.genre.toLowerCase() === genre.toLowerCase());
     }
 
     // filter title
