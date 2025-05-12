@@ -37,15 +37,24 @@ const initialMovies = [
 const App = () => {
   const [filteredMovies, setFilteredMovies] = useState(initialMovies);
   const [genre, setGenre] = useState("");
+  const [search, setSearch] = useState("");
 
-
+  // filter movies effect
   useEffect(() => {
-    if (genre === '') {
-      setFilteredMovies(initialMovies);
-    } else {
-      setFilteredMovies(initialMovies.filter(movie => movie.genre === genre));
+    let filtered = initialMovies;
+
+    if (genre) {
+      filtered = filtered.filter(movie => movie.genre === genre);
     }
-  }, [genre]);
+
+    if (search.trim() !== '') {
+      filtered = filtered.filter(movie =>
+        movie.title.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    setFilteredMovies(filtered);
+  }, [initialMovies, genre, search]);
 
   return (
     <div className="container">
@@ -83,6 +92,17 @@ const App = () => {
           </li>
         ))}
       </ul>
+
+      {/* search by title */}
+      <div className="input-group">
+        <input
+          type="text"
+          placeholder='Cerca un film..'
+          className='form-control'
+          value={search}
+          onChange={(e) => { setSearch(e.target.value) }}
+        />
+      </div>
     </div>
   )
 }
