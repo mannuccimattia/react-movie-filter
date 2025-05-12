@@ -37,6 +37,7 @@ const App = () => {
   return (
     <div className="container">
       <h1>Movie List</h1>
+      {/* select genre */}
       <div className="form-floating">
         <select
           className="form-select form-select-lg"
@@ -50,7 +51,14 @@ const App = () => {
         </select>
         <label for="genreSelect">Genere:</label>
       </div>
-
+      {/* display items */}
+      {movies.map(item => (
+        <div className="card m-2" key={`movie-${item.id}`}>
+          <div className="card-title p-2">
+            {item.title}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
