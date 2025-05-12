@@ -37,7 +37,7 @@ const initialMovies = [
 // empty new movie template
 const App = () => {
   const emptyItem = {
-    id: "",
+    id: parseInt(initialMovies.length) + 1,
     title: "",
     genre: "",
   }
@@ -47,11 +47,6 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState(initialMovies);
   const [newMovie, setNewMovie] = useState(emptyItem)
-
-  // get new movie id (biggest available + 1) 
-  emptyItem.id = parseInt(
-    Math.max(...movies.map(movie => movie.id))
-  ) + 1
 
   // filter movies effect
   useEffect(() => {
@@ -75,6 +70,7 @@ const App = () => {
   // add new movie
   const addMovie = (e) => {
     e.preventDefault();
+    emptyItem.id = Math.max(...movies.map((mov) => mov.id + 1)) + 1;
     if (newMovie.title && newMovie.genre) {
       setMovies([...movies, newMovie]);
       setNewMovie(emptyItem);
